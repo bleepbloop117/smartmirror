@@ -23,5 +23,16 @@ $(document).ready(function($) {
       $('.weather-temp-low').html("Low " + Math.round(forecastioJson.temperatureMin) + "°");
     });
   }
+
+  function dateDay() {
+    var newDate = new Date();
+    var locale = "en-us";
+    var month = newDate.toLocaleString(locale, { month: "long" });
+
+    $('.date-day').html(newDate.getDate() + " " + month)
+  }
+
+  // Initalize
   weather();
+  dateDay();
 });
