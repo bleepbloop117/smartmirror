@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Smart Mirror</title>
+    <link rel="stylesheet" href="css/weather-icons.min.css">
   </head>
   <body>
-    <div id="weather"></div>
+    <div class="weather-temp"></div><div class="weather-temp-icon"></div>
 
     <script src="js/lib/jquery-1.12.0.min.js"></script>
 
@@ -19,7 +20,14 @@
         var data;
 
         $.getJSON(url + apiKey + "/" + lati + "," + longi + "?callback=?", function(data) {
-          $('#weather').html('The temperature is: ' + data.currently.temperature + " " + data.currently.summary);
+
+          //Current temp
+          var forecastIOTemp = Math.round(data.currently.temperature);
+          $('.weather-temp').html(forecastIOTemp + "°");
+
+          //Current weather icon
+          $('.weather-temp-icon').html('<i class="wi wi-forecast-io-'+ data.currently.icon +'"></i>');
+
         });
       }
       weather();
