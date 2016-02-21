@@ -28,8 +28,11 @@ $(document).ready(function($) {
     var newDate = new Date();
     var locale = "en-us";
     var month = newDate.toLocaleString(locale, { month: "long" });
+    var day = newDate.toLocaleString(locale, { weekday: "long" });
+    var date = newDate.toLocaleString(locale, { day: "numeric" });
+    var time = newDate.toLocaleString(locale, { hour: "2-digit", minute: "2-digit" });
 
-    $('.date-day').html(newDate.getDate() + " " + month)
+    $('.date-day').html(day + " " + date + " " + month + " " + time)
   }
 
   // Initalize
