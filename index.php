@@ -7,7 +7,7 @@
   </head>
   <body>
 
-
+<!-- working -->
     <?php
       $imap = imap_open("{mail.webfaction.com:143}INBOX", "mom_swissfish", "mommirror");
       $message_count = imap_num_msg($imap);
@@ -21,8 +21,12 @@
         }
 
         $body = trim(substr(quoted_printable_decode($body), 0, 100));
+        date_default_timezone_set(America/New_York);
 
-        $prettydate = date("jS F Y", $header->udate);
+        $unixdate = $header->udate;
+        print "<b>unix timestamp: $unixdate </b>";
+
+        $prettydate = date("jS F Y H i", $unixdate);
 
         if (isset($header->from[0]->personal)) {
             $personal = $header->from[0]->personal;
@@ -31,11 +35,25 @@
         }
 
         $email = "$personal <{$header->from[0]->mailbox}@{$header->from[0]->host}>";
-        echo "On $prettydate, $email said \"$body\".\n";
+        echo "<i>output timestamp w/o localization $prettydate</i>, $email said \"$body\".\n";
     }
 
     imap_close($imap);
 ?>
+
+<!-- option -->
+<!-- <?php
+  $imap = imap_open("{mail.webfaction.com:143}INBOX", "mom_swissfish", "mommirror");
+    $messages = imap_sort($imap, SORTDATE, 1);
+
+    foreach ($messages as $message) {
+        $header = imap_header($imap, $message);
+        $prettydate = date("jS F Y", $header->udate);
+        print "{$header->fromaddress} - $prettydate\n";
+    }
+
+    imap_close($imap);
+?> -->
 
 
     <div class="date-day"></div>
