@@ -21,7 +21,7 @@
         }
 
         $body = trim(substr(quoted_printable_decode($body), 0, 100));
-        date_default_timezone_set(America/New_York);
+        // date_default_timezone_set(America/New_York);
 
         $unixdate = $header->udate;
         print "<b>unix timestamp: $unixdate </b>";
