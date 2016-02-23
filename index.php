@@ -7,53 +7,47 @@
   </head>
   <body>
 
-<!-- working -->
-    <?php
-      $imap = imap_open("{mail.webfaction.com:143}INBOX", "mom_swissfish", "mommirror");
-      $message_count = imap_num_msg($imap);
+<!-- todo
+1- make faster, currently loop through all emails, not effective, to slow should check for unread first.
+2- set display time? display for one day? seems ok. think about other options. -->
 
-    for ($i = 1; $i <= $message_count; ++$i) {
-        $header = imap_header($imap, $i);
-        $body = imap_fetchbody($imap, $i, "1.1");
-
-        if ($body == "") {
-            $body = imap_fetchbody($imap, $i, "1");
-        }
-
-        $body = trim(substr(quoted_printable_decode($body), 0, 100));
-        // date_default_timezone_set(America/New_York);
-
-        $unixdate = $header->udate;
-        print "<b>unix timestamp: $unixdate </b>";
-
-        $prettydate = date("jS F Y H i", $unixdate);
-
-        if (isset($header->from[0]->personal)) {
-            $personal = $header->from[0]->personal;
-        } else {
-            $personal = $header->from[0]->mailbox;
-        }
-
-        $email = "$personal <{$header->from[0]->mailbox}@{$header->from[0]->host}>";
-        echo "<i>output timestamp w/o localization $prettydate</i>, $email said \"$body\".\n";
-    }
-
-    imap_close($imap);
-?>
-
-<!-- option -->
-<!-- <?php
+<?php
   $imap = imap_open("{mail.webfaction.com:143}INBOX", "mom_swissfish", "mommirror");
-    $messages = imap_sort($imap, SORTDATE, 1);
-
-    foreach ($messages as $message) {
-        $header = imap_header($imap, $message);
-        $prettydate = date("jS F Y", $header->udate);
-        print "{$header->fromaddress} - $prettydate\n";
+  //Sort by newest
+  $messages = imap_sort($imap, SORTDATE, 1);
+  //Loop through all messages
+  foreach ($messages as $message) {
+    //search for unread messages
+    if (imap_search($imap,'UNSEEN')) {
+    //Set messages to read
+    imap_setflag_full($imap, $message, "\\Seen \\Flagged");
+    //Pull out header and body content
+    $header = imap_headerinfo($imap, $message);
+    $body = imap_fetchbody($imap, $message, "1.1");
+    //Body email backup
+    if ($body == "") {
+        $body = imap_fetchbody($imap, $message, "1");
     }
-
-    imap_close($imap);
-?> -->
+    // Set timezone
+    date_default_timezone_set('America/New_York');
+    //Get time from email header
+    $unixdate = $header->udate;
+    //Prettify date
+    $prettydate = date("F jS", $unixdate);
+    //Get name or mailbox name is none
+    if (isset($header->from[0]->personal)) {
+        $personal = $header->from[0]->personal;
+    } else {
+        $personal = $header->from[0]->mailbox;
+    }
+    //Who it's from
+    $email = "$personal <{$header->from[0]->mailbox}@{$header->from[0]->host}>";
+    //display date, author and message
+    echo "$prettydate, $email \"$body\"\n";
+    }
+  }
+  imap_close($imap);
+?>
 
 
     <div class="date-day"></div>
