@@ -35,6 +35,8 @@ $(document).ready(function($) {
     $('.date-day').html(day + " " + date + " " + month + " " + time)
   }
 
+  
+
   // Initalize
   weather();
   dateDay();
