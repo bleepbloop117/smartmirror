@@ -47,7 +47,6 @@ $(document).ready(function($) {
         //Corgi photo
         $('.corgi-photo').html('<img src="http://c2.staticflickr.com/' + flickrPhoto.farm + '/' + flickrPhoto.server + '/' + flickrPhoto.id + '_' + flickrPhoto.secret + '_n.jpg" alt="">');
     });
-
   }
 
   // Initalize
