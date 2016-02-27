@@ -18,7 +18,7 @@ $(document).ready(function($) {
       $('.weather-temp').html("Currently " + forecastIOTemp + "°");
       //Current weather icon
       $('.weather-temp-icon').html('<i class="wi wi-forecast-io-'+ currentIcon +'"></i>');
-      //
+      //High and low temp for the day
       $('.weather-temp-high').html("High " + Math.round(forecastioJson.temperatureMax) + "°");
       $('.weather-temp-low').html("Low " + Math.round(forecastioJson.temperatureMin) + "°");
     });
@@ -35,9 +35,23 @@ $(document).ready(function($) {
     $('.date-day').html(day + " " + date + " " + month + " " + time)
   }
 
-  
+  function corgi() {
+    var apikey = '741bef16bf4309bddaadc1932671a695';
+    var groupId = '99569006@N00'
+    var url = 'https://api.flickr.com/services/rest/?&method=';
+    var flickerGet = 'flickr.groups.pools.getPhotos';
+    var flickerUser = '24982374@N07';
+
+    $.getJSON(url + flickerGet + '&api_key=' + apikey + '&group_id=' + groupId + '&format=json&jsoncallback=?', function(data) {
+        var flickrPhoto = data.photos.photo[0];
+        //Corgi photo
+        $('.corgi-photo').html('<img src="http://c2.staticflickr.com/' + flickrPhoto.farm + '/' + flickrPhoto.server + '/' + flickrPhoto.id + '_' + flickrPhoto.secret + '_n.jpg" alt="">');
+    });
+
+  }
 
   // Initalize
   weather();
   dateDay();
+  corgi();
 });
